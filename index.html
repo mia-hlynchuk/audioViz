@@ -1,0 +1,23 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Audio Visualization</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+	<canvas id="vizCanvas" width="1200" height="700"></canvas>
+  <div id="menu">
+    <div id="info">
+      <h2>Audio Visualization</h2>
+      <p><span>Spacebar</span> - for pausing/stoping<br/> <span>V</span> - to see a different view</p>
+    </div>
+    <div id="songs"></div>
+  </div>
+  <div id="loader"></div>
+  <script language="javascript" type="text/javascript" src="audioViz.js"></script> 
+  <script type="text/javascript">
+    audioViz.setup();
+  </script>
+</body>
+</html>
