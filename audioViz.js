@@ -32,7 +32,7 @@ var audioViz = (function() {
 	var canvas,
 		canvasCtx,
 		WIDTH, HEIGHT, 
-		canvasColor = "rgb(128,128,128)",
+		canvasColor = "black", 
 		view = 1,
 		drawVisual;
 
@@ -62,12 +62,6 @@ var audioViz = (function() {
 					play(source.buffer);
 				}
 			}
-			// V for changing the view 
-			if (e.keyCode == 86) { 
-				if (view == 1) view = 2;
-				else if (view == 2) view = 3;
-				else if (view == 3) view = 1;
-			} 
 		};
 	}
 
@@ -128,7 +122,6 @@ var audioViz = (function() {
 		// hide the menu while the file is playing
 		document.getElementById("menu").classList.add("hide");
 
-
 		var offset = pausedAt;
 
 		source = audioCtx.createBufferSource();
@@ -169,22 +162,23 @@ var audioViz = (function() {
 		playing = false;		
 	}
 
-	
 
 	function analyseAudio() {
 		splitter = audioCtx.createChannelSplitter(2);
 
 		// create analyser node for 2 channels
 		analyserLeft = audioCtx.createAnalyser();
-		analyserLeft.fftSize = 1024;
+		analyserLeft.fftSize = 256;
 		leftBufferLength = analyserLeft.frequencyBinCount;
 		leftDataArray = new Uint8Array(leftBufferLength);
 
 		analyserRight = audioCtx.createAnalyser();
-		analyserRight.fftSize = 1024;
+		analyserRight.fftSize = 256;
 		rightBufferLength = analyserRight.frequencyBinCount;
 		rightDataArray = new Uint8Array(rightBufferLength);
-		
+
+		console.log("left bins: " + leftBufferLength);
+		console.log("right bins: " + rightBufferLength);
 		source.connect(splitter);
 		splitter.connect(analyserLeft, 0);
 		splitter.connect(analyserRight, 1);
@@ -200,53 +194,78 @@ var audioViz = (function() {
 		analyserLeft.getByteFrequencyData(leftDataArray);
 		analyserRight.getByteFrequencyData(rightDataArray);
 
-		var barWidth = (WIDTH / leftBufferLength),
-			leftBarHeight,
-			rightBarHeight,
-			leftX = 0,
+		var leftBarHeight,
+			rightBarHeight;
+
+		var	leftX = 0,
 			rightX = 0;
 
 		var leftY = 0,
 			rightY = 0;
 
+		var leftAngle = 0,
+			rightAngle = 0;
+
+
 		canvasCtx.fillStyle = canvasColor;
 		canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
 
 		for (var i = 0; i < leftBufferLength; i++) {
-			
 			leftBarHeight = leftDataArray[i]; 
 			rightBarHeight = rightDataArray[i]; 
 
-			if (view == 1) {				
-				canvasCtx.fillStyle = "rgba(" + leftBarHeight + ", 0, "+ leftBarHeight+ ", 1)";
-				canvasCtx.fillRect(0, HEIGHT-leftY, leftBarHeight, barWidth);
-				leftY += barWidth;
-				
-				canvasCtx.fillStyle = "rgba(0, " + rightBarHeight + ", 0, 1)";
-				canvasCtx.fillRect(WIDTH-rightBarHeight, HEIGHT-rightY, rightBarHeight, barWidth);
-				rightY += barWidth;
+	
+			// draw line for the left data
+			drawLine(
+				WIDTH/2, HEIGHT/2, 
+				leftBarHeight, 
+				leftAngle,
+				"rgba(" + leftBarHeight + ", 0, "+ leftBarHeight+ ", 1)"
+			);
 
-			} else if (view == 2) {
-				canvasCtx.fillStyle = "rgba(" + leftBarHeight + ", 0, "+ leftBarHeight+ ", 1)";
-				canvasCtx.fillRect(leftX, HEIGHT-leftBarHeight, barWidth, leftBarHeight);
-				leftX += barWidth + 1;
+			// draw line for the right data
+			drawLine(
+				WIDTH/2, HEIGHT/2, 
+				rightBarHeight, 
+				rightAngle,
+				"rgba(0, " + rightBarHeight + ", 0, 1)"
+			);
 
-				canvasCtx.fillStyle = "rgba(0, " + rightBarHeight + ", 0, .8)";
-				canvasCtx.fillRect(rightX, HEIGHT-rightBarHeight, barWidth, rightBarHeight);
-				rightX += barWidth + 1;
+			// angles up to half the circle
+			leftAngle += ( (3/2) * Math.PI) / leftBufferLength;
+			rightAngle -= ( (3/2) * Math.PI) / rightBufferLength;
 
-			} else if (view == 3) {
-				canvasCtx.fillStyle = "rgba(" + leftBarHeight + ", 0, "+ leftBarHeight+ ", 1)";
-				canvasCtx.fillRect(CENTER-leftBarHeight, HEIGHT-leftY, leftBarHeight, barWidth);
-				leftY += barWidth;
-				
-				canvasCtx.fillStyle = "rgba(0, " + rightBarHeight + ", 0, 1)";
-				canvasCtx.fillRect(CENTER, HEIGHT-rightY, rightBarHeight, barWidth);
-				rightY += barWidth;
-			}
+			// full cirlce
+			//angle += ((2*Math.PI)/leftBufferLength );
 		}
 	}
+
+
+	// returns coordinates for a point on a circle's circumference
+	function pointOnCircle(cx, cy, r, angle) {
+		var x = cx - (r * Math.sin(angle)),
+			y = cy - (r * Math.cos(angle));
+
+		return {x: x, y: y};
+	}
+
 	
+	// Draw a line at a specific angle
+	function drawLine(x, y, r, angle, color) {
+		var radiusOffset = 200,
+			// instead of making the starting point the center of canvas,
+			// the starting point will be the point from a circle's circumference with radius=200
+			startPoint = pointOnCircle(x, y, radiusOffset, angle),
+			endPoint = pointOnCircle(x, y, radiusOffset + r, angle);
+
+		canvasCtx.lineWidth = 4;
+		canvasCtx.strokeStyle = color;
+		canvasCtx.beginPath();
+		canvasCtx.moveTo(startPoint.x, startPoint.y);
+		canvasCtx.lineTo(endPoint.x, endPoint.y);
+		canvasCtx.stroke();
+	}
+
 	return {
 		setup: setup,
 		loadSoundFile: loadSoundFile,
