@@ -36,6 +36,7 @@ var audioViz = (function() {
 		view = 1,
 		drawVisual;
 
+	var menu = document.getElementById("menu");
 
 	function setup() {
 		// set up the audio 
@@ -59,7 +60,15 @@ var audioViz = (function() {
 			if (e.keyCode == 32) { 
 				if( playing ) pause();
 				else {
-					play(source.buffer);
+					if(source) play(source.buffer);
+				}
+			} 
+			// M for menu
+			else if(e.keyCode == 77 && !playing ) {
+				if(menu.classList.contains('hide')) {
+					menu.classList.remove("hide");
+				} else {
+					menu.classList.add("hide");
 				}
 			}
 		};
@@ -148,9 +157,7 @@ var audioViz = (function() {
 		pausedAt = elapsed;
 	}
 
-	function stop() {
-		document.getElementById("menu").classList.remove("hide");
-		
+	function stop() {		
 		if (source) {
 			source.disconnect();
 			source.stop(0);
