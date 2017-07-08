@@ -36,7 +36,8 @@ var audioViz = (function() {
 		view = 1,
 		drawVisual;
 
-	var menu = document.getElementById("menu");
+	var menu = document.getElementById("menu"),
+		showMenu;
 
 	function setup() {
 		// set up the audio 
@@ -65,11 +66,7 @@ var audioViz = (function() {
 			} 
 			// M for menu
 			else if(e.keyCode == 77 && !playing ) {
-				if(menu.classList.contains('hide')) {
-					menu.classList.remove("hide");
-				} else {
-					menu.classList.add("hide");
-				}
+				displayMenu(showMenu);
 			}
 		};
 	}
@@ -88,14 +85,28 @@ var audioViz = (function() {
 			label.appendChild(text);
 			songs.appendChild(label);
 			radioBtn.onclick = function(e) {
+				displayMenu(false);
 				loadSoundFile(e.target.value);
 			};
 		}	
 	}
 
+	function displayMenu(visible) {
+		if(visible) {
+			menu.classList.remove("hide");
+			showMenu = false;
+		}
+		else {
+			menu.classList.add("hide");
+			showMenu = true;
+		}
+	}
 
 	// load the selected audio file 
 	function loadSoundFile(path) {
+		// show the loader																																		
+		document.getElementById("loader").classList.add("show");
+		
 		selectedAudio = path;
 		console.log("playingAudio: ", playingAudio);
 		console.log("selectedAudio: ", selectedAudio);
@@ -109,8 +120,6 @@ var audioViz = (function() {
 
 		request.onload = function() {
 			var audioData = request.response;
-
-			document.getElementById("loader").classList.add("show");
 
 			audioCtx.decodeAudioData(audioData, function(buffer) {
 
@@ -128,8 +137,10 @@ var audioViz = (function() {
 	function play(buffer) {
 		playingAudio = document.querySelector('input[name=song]:checked').value;
 		console.log(buffer);
+		
 		// hide the menu while the file is playing
-		document.getElementById("menu").classList.add("hide");
+		//document.getElementById("menu").classList.add("hide");
+		//displayMenu(false);
 
 		var offset = pausedAt;
 
@@ -141,6 +152,7 @@ var audioViz = (function() {
 
 		source.onended = function(e) {
 			stop();
+			displayMenu(true);
 		};
 			
 		startedAt = audioCtx.currentTime - offset;
