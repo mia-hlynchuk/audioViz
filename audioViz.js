@@ -19,9 +19,6 @@ var audioViz = (function() {
 		pausedAt = 0,
 		playing = false;
 
-	var	playingAudio,
-		selectedAudio;
-
 	var canvas,
 		canvasCtx,
 		WIDTH, HEIGHT, 
@@ -36,9 +33,9 @@ var audioViz = (function() {
 		// set up the audio 
 		audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 		
+		// set up an event for each song
 		var songs = document.getElementsByTagName("input");
 		for (var i = 0; i < songs.length; i++) {
-			console.log(songs[i]);
 			songs[i].onclick = function(e) {
 				displayMenu(false);
 				loadSoundFile(e.target.value);
@@ -87,10 +84,6 @@ var audioViz = (function() {
 		// show the loader																																		
 		document.getElementById("loader").classList.add("show");
 		
-		selectedAudio = path;
-		console.log("playingAudio: ", playingAudio);
-		console.log("selectedAudio: ", selectedAudio);
-		
 		// stop the current audio buffer before loading the selected audio
 		if(source) stop();
 
@@ -115,13 +108,6 @@ var audioViz = (function() {
 	}
 
 	function play(buffer) {
-		playingAudio = document.querySelector('input[name=song]:checked').value;
-		console.log(buffer);
-		
-		// hide the menu while the file is playing
-		//document.getElementById("menu").classList.add("hide");
-		//displayMenu(false);
-
 		var offset = pausedAt;
 
 		source = audioCtx.createBufferSource();
@@ -154,7 +140,6 @@ var audioViz = (function() {
 			source.disconnect();
 			source.stop(0);
 			cancelAnimationFrame(drawVisual);
-			console.log("STOP");
 		}
 		pausedAt = 0;
 		startedAt = 0;
@@ -176,8 +161,6 @@ var audioViz = (function() {
 		rightBufferLength = analyserRight.frequencyBinCount;
 		rightDataArray = new Uint8Array(rightBufferLength);
 
-		console.log("left bins: " + leftBufferLength);
-		console.log("right bins: " + rightBufferLength);
 		source.connect(splitter);
 		splitter.connect(analyserLeft, 0);
 		splitter.connect(analyserRight, 1);
