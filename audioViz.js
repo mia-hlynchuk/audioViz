@@ -19,14 +19,7 @@ var audioViz = (function() {
 		pausedAt = 0,
 		playing = false;
 
-	var	soundFiles = [
-			"song_1.mp3",
-			"song_2.mp3",
-			"song_3.mp3",
-			"song_4.mp3",
-			"song_5.mp3"
-		],
-		playingAudio,
+	var	playingAudio,
 		selectedAudio;
 
 	var canvas,
@@ -43,8 +36,14 @@ var audioViz = (function() {
 		// set up the audio 
 		audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 		
-		// set up controls
-		createControls();
+		var songs = document.getElementsByTagName("input");
+		for (var i = 0; i < songs.length; i++) {
+			console.log(songs[i]);
+			songs[i].onclick = function(e) {
+				displayMenu(false);
+				loadSoundFile(e.target.value);
+			};
+		}
 		
 		// set up the canvas
 		canvas = document.getElementById("vizCanvas");
@@ -71,25 +70,6 @@ var audioViz = (function() {
 		};
 	}
 
-	function createControls() {		
-		// buttons for the sound files
-		var songs = document.getElementById("songs");
-		for (var i = 0; i < soundFiles.length; i++) {
-			var label = document.createElement("label");
-			var radioBtn = document.createElement("input");
-			radioBtn.type = "radio";
-			radioBtn.name = "song";
-			radioBtn.value = "data/" + soundFiles[i];
-			label.appendChild(radioBtn);
-			var text = document.createTextNode(soundFiles[i]);
-			label.appendChild(text);
-			songs.appendChild(label);
-			radioBtn.onclick = function(e) {
-				displayMenu(false);
-				loadSoundFile(e.target.value);
-			};
-		}	
-	}
 
 	function displayMenu(visible) {
 		if(visible) {
@@ -285,10 +265,11 @@ var audioViz = (function() {
 		canvasCtx.stroke();
 	}
 
+
+
 	return {
 		setup: setup,
 		loadSoundFile: loadSoundFile,
-		createControls: createControls,
 		stop: stop,
 		play: play,
 		pause: pause,

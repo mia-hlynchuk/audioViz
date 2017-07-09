@@ -8,15 +8,36 @@
 <body>
 	<canvas id="vizCanvas" width="1200" height="700"></canvas>
   <div id="menu">
+    <h2>Audio Visualization</h2>
     <div id="info">
-      <h2>Audio Visualization</h2>
       <p>
         Select an audio file to play<br/>
         <span>Spacebar</span> - for pausing/stoping<br/> 
         <span>M</span> - for menu
       </p>
     </div>
-    <div id="songs"></div>
+    <div id="songs">
+      <label>
+        <input type="radio" name="song" value="audio/Borrtex-Peaceful_Mind.mp3">Peaceful Mind
+      </label>
+      <label>
+        <input type="radio" name="song" value="audio/Nihilore-Endless_Blue.mp3">Endless Blue
+      </label>
+      <label>
+        <input type="radio" name="song" value="audio/PC-ONE_-_07_-_Monachine_Instrumental_Acoustic.mp3">Monachine
+      </label>
+      <label>
+        <input type="radio" name="song" value="audio/Rope_River_Blues_Band_-_02_-_The_Vistas_Missing_Views.mp3">The Vistas Missing Views
+      </label>
+    </div>
+    <div id="credits">
+      <h3>Credits</h3>
+      <ul>
+        <li>Peaceful Mind by <a rel="artist" href="http://freemusicarchive.org/music/Borrtex/">Borrtex</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/">Attribution-NonCommercial License</a></li>
+        <li>Endless Blue by <a rel="artist" href="http://freemusicarchive.org/music/Nihilore/">Nihilore</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution License</a></li>
+        <li>Monachine (Instrumental Acoustic) by <a rel="artist" href="http://freemusicarchive.org/music/PC-ONE">PC-ONE</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Attribution License</a></li>
+        <li>The Vista's Missing Views by <a rel="artist">The Rope River Blues Band</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/3.0/us/">Attribution-Noncommercial-Share Alike 3.0 United States License</a></li>
+    </div>
   </div>
   <div id="loader"></div>
   <script language="javascript" type="text/javascript" src="audioViz.js"></script> 

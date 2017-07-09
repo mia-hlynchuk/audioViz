@@ -9,6 +9,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
+  width: 250px;
   height: 100%;
   padding:10px 15px;
   background-color: #a900ff;
@@ -18,7 +19,7 @@ body {
   display: none;
 }
 
-#menu #info h2 {
+#menu h2 {
   color: white;
 }
 
@@ -51,6 +52,22 @@ body {
   margin: 0;
 }
 
+#menu #credits {
+  position: fixed;
+  bottom: 10px;
+  width: inherit;
+  border-top: 1px solid;
+  font-size: 12px;
+}
+
+#credits ul {
+    padding: 0 20px;
+    text-align: justify;
+}
+
+#credits ul li {
+  margin-bottom: 5px;
+}
 
 /* Loader - from W3schools*/
 #loader.hide {
