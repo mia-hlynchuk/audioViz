@@ -34,7 +34,7 @@ var audioViz = (function() {
 		audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 		
 		// set up an event for each song
-		var songs = document.getElementsByTagName("input");
+		var songs = document.querySelectorAll("#songs input");
 		for (var i = 0; i < songs.length; i++) {
 			songs[i].onclick = function(e) {
 				displayMenu(false);
@@ -65,6 +65,12 @@ var audioViz = (function() {
 			else if(e.keyCode == 77 && !playing ) {
 				displayMenu(showMenu);
 			}
+		};
+
+		document.getElementById("audioFile").onchange = function() {
+			displayMenu(false);
+			var file = URL.createObjectURL(this.files[0]);
+			loadSoundFile(file);
 		};
 	}
 

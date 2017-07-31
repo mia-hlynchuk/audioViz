@@ -13,14 +13,11 @@ body {
   height: 100%;
   padding:10px 15px;
   background-color: #a900ff;
+  color: #fff;
 }
 
 #menu.hide {
   display: none;
-}
-
-#menu h2 {
-  color: white;
 }
 
 #menu #info p {
@@ -41,7 +38,6 @@ body {
   margin: 10px;
   padding: 10px;
   background-color: #fd0082;
-  color: white;
   cursor: pointer;
   text-align: center;
 }
@@ -52,9 +48,17 @@ body {
   margin: 0;
 }
 
+#menu #upload {
+  width: 225px;
+  padding: 10px;
+}
+
+#upload input {
+  width: inherit;
+}
+
 #menu #credits {
-  position: fixed;
-  bottom: 10px;
+  margin-top: 50px;
   width: inherit;
   border-top: 1px solid;
   font-size: 12px;
