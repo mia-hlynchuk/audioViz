@@ -27,7 +27,7 @@ var audioViz = (function() {
 		drawVisual;
 
 	var menu = document.getElementById("menu"),
-		showMenu;
+		showMenu = true;
 
 	function setup() {
 		// set up the audio 
@@ -57,6 +57,7 @@ var audioViz = (function() {
 			if (e.keyCode == 32) { 
 				if( playing ) pause();
 				else {
+					displayMenu(false);
 					if(source) play(source.buffer);
 				}
 			} 
@@ -188,6 +189,7 @@ var audioViz = (function() {
 		var leftAngle = 0,
 			rightAngle = 0;
 
+		canvasCtx.lineWidth = (Math.PI * (200)) / 128;
 
 		canvasCtx.fillStyle = canvasColor;
 		canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
@@ -196,7 +198,6 @@ var audioViz = (function() {
 			leftBarHeight = leftDataArray[i]; 
 			rightBarHeight = rightDataArray[i]; 
 
-	
 			// draw line for the left data
 			drawLine(
 				WIDTH/2, HEIGHT/2, 
@@ -216,7 +217,7 @@ var audioViz = (function() {
 			// angles up to half the circle
 			leftAngle += ( (3/2) * Math.PI) / leftBufferLength;
 			rightAngle -= ( (3/2) * Math.PI) / rightBufferLength;
-
+			
 			// full cirlce
 			//angle += ((2*Math.PI)/leftBufferLength );
 		}
@@ -240,15 +241,13 @@ var audioViz = (function() {
 			startPoint = pointOnCircle(x, y, radiusOffset, angle),
 			endPoint = pointOnCircle(x, y, radiusOffset + r, angle);
 
-		canvasCtx.lineWidth = 4;
+		//canvasCtx.lineWidth = (Math.PI * (200+r)) / 128;
 		canvasCtx.strokeStyle = color;
 		canvasCtx.beginPath();
 		canvasCtx.moveTo(startPoint.x, startPoint.y);
 		canvasCtx.lineTo(endPoint.x, endPoint.y);
 		canvasCtx.stroke();
 	}
-
-
 
 	return {
 		setup: setup,
