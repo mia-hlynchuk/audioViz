@@ -221,11 +221,8 @@ var audioViz = (function() {
 			);
 
 			// angles up to half the circle
-			leftAngle += ( (3/2) * Math.PI) / leftBufferLength;
-			rightAngle -= ( (3/2) * Math.PI) / rightBufferLength;
-			
-			// full cirlce
-			//angle += ((2*Math.PI)/leftBufferLength );
+			leftAngle += ((Math.PI)/leftBufferLength );
+			rightAngle -= ((Math.PI)/rightBufferLength );
 		}
 	}
 
@@ -247,7 +244,7 @@ var audioViz = (function() {
 			startPoint = pointOnCircle(x, y, radiusOffset, angle),
 			endPoint = pointOnCircle(x, y, radiusOffset + r, angle);
 
-		//canvasCtx.lineWidth = (Math.PI * (200+r)) / 128;
+		//canvasCtx.lineWidth = (Math.PI * (r+radiusOffset)) / 128;
 		canvasCtx.strokeStyle = color;
 		canvasCtx.beginPath();
 		canvasCtx.moveTo(startPoint.x, startPoint.y);
